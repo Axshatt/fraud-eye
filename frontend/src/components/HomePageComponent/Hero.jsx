@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Database, Activity, ArrowRight } from 'lucide-react';
+import { Database, Activity, LayoutDashboard } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = ({ onSampleLoad }) => {
+  const navigate = useNavigate();
+
   return (
     <section className="animate-fade-in" style={{ 
       position: 'relative', 
@@ -35,7 +38,7 @@ const Hero = ({ onSampleLoad }) => {
           Bhai, Financial Security is our Top Priority
         </div>
         <h1 className="apple-heading" style={{ 
-          fontSize: 'clamp(56px, 10vw, 108px)', 
+          fontSize: 'clamp(48px, 8vw, 88px)', 
           lineHeight: '1.02', 
           marginBottom: '32px',
         }}>
@@ -43,14 +46,14 @@ const Hero = ({ onSampleLoad }) => {
           <span style={{ color: 'var(--primary)' }}>Instantly.</span>
         </h1>
         <p style={{ 
-          fontSize: '22px', 
+          fontSize: '20px', 
           color: 'var(--text-secondary)', 
-          maxWidth: '650px', 
+          maxWidth: '600px', 
           margin: '0 auto 48px',
           fontWeight: '500',
           lineHeight: '1.45'
         }}>
-          Advanced AML heuristics and relationship mapping to secure your financial ecosystem bhai. Verified & Protected.
+          Advanced AML heuristics and relationship mapping to secure your financial ecosystem bhai. Real-time protection for your assets.
         </p>
       </motion.div>
 
@@ -58,22 +61,40 @@ const Hero = ({ onSampleLoad }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        style={{ display: 'flex', gap: '20px' }}
+        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}
       >
         <button 
-          onClick={onSampleLoad}
+          onClick={() => navigate('/analyze')}
           className="apple-btn"
-          style={{ padding: '16px 36px' }}
+          style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: '8px' }}
         >
-          <Database size={20} /> Autofill
+          <Activity size={20} /> Analysis Center
         </button>
-        <a 
-          href="#upload" 
+        <button 
+          onClick={() => navigate('/analytics')}
           className="apple-btn apple-btn-secondary"
-          style={{ textDecoration: 'none', padding: '16px 36px' }}
+          style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: '8px' }}
         >
-          <Activity size={20} /> Start Analysis
-        </a>
+          <LayoutDashboard size={20} /> Intelligence Dashboard
+        </button>
+        <button 
+          onClick={onSampleLoad}
+          style={{ 
+            background: 'none', 
+            border: '1px solid var(--border)', 
+            padding: '16px 32px', 
+            borderRadius: '12px',
+            fontSize: '15px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+          className="hover-lift"
+        >
+          <Database size={18} /> Test Sample
+        </button>
       </motion.div>
     </section>
   );

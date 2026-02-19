@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const MainLayout = ({ children }) => {
   const layoutStyle = {
@@ -42,7 +43,7 @@ const MainLayout = ({ children }) => {
     <div style={layoutStyle}>
       <header className="glass-nav">
         <div style={navStyle}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: 'inherit' }}>
             <div style={{ 
               width: '32px', 
               height: '32px', 
@@ -57,12 +58,12 @@ const MainLayout = ({ children }) => {
             <span style={{ fontSize: '20px', fontWeight: '700', letterSpacing: '-0.02em' }}>
               FraudWatch
             </span>
-          </div>
+          </Link>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            <a href="#upload" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', fontSize: '14px' }}>Analyze</a>
-            <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', fontSize: '14px' }}>History</a>
-            <button className="apple-btn" style={{ padding: '8px 16px', fontSize: '14px' }}>Get Started</button>
+            <Link to="/" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', fontSize: '14px' }}>Home</Link>
+            <Link to="/analytics" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', fontSize: '14px' }}>Analytics</Link>
+            <button className="apple-btn" style={{ padding: '8px 16px', fontSize: '14px' }}>Sign In</button>
           </div>
         </div>
       </header>
