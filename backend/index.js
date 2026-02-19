@@ -4,11 +4,13 @@ dotenv.config({
 });
 import connectDB from "./config/db.js";
 import { app } from "./app.js";
+import authServices from "./services/authServices.js";
 
 connectDB()
-    .then(() => {
-        app.listen(process.env.PORT || 5000, () => {
-            console.log(`Server is running at port : ${process.env.PORT || 5000}`);
+    .then(async () => {
+        await authServices.seedAdmin();
+        app.listen(process.env.PORT || 8000, () => {
+            console.log(`Server is running at port : ${process.env.PORT}`);
         });
     })
     .catch((err) => {

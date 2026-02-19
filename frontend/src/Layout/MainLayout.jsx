@@ -1,7 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../Context/Auth/AuthContext';
+import { LogOut, UserPlus } from 'lucide-react';
 
 const MainLayout = ({ children }) => {
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
   const layoutStyle = {
     minHeight: '100vh',
     display: 'flex',
@@ -60,10 +69,37 @@ const MainLayout = ({ children }) => {
             </span>
           </Link>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
             <Link to="/" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', fontSize: '14px' }}>Home</Link>
-            <Link to="/analytics" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', fontSize: '14px' }}>Analytics</Link>
-            <button className="apple-btn" style={{ padding: '8px 16px', fontSize: '14px' }}>Sign In</button>
+            {isAuthenticated && (
+              <Link to="/analytics" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', fontSize: '14px' }}>Analytics</Link>
+            )}
+            
+            {isAuthenticated ? (
+              <button 
+                onClick={handleLogout}
+                className="apple-btn apple-btn-secondary" 
+                style={{ padding: '8px 16px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <LogOut size={16} /> Logout
+              </button>
+            ) : (
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <Link 
+                  to="/login"
+                  className="apple-btn" 
+                  style={{ padding: '8px 16px', fontSize: '14px', textDecoration: 'none' }}
+                >
+                  Sign In
+                </Link>
+                <button 
+                  className="apple-btn apple-btn-secondary" 
+                  style={{ padding: '8px 16px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                  <UserPlus size={16} /> Sign Up
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </header>

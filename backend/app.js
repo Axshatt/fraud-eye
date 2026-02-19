@@ -17,6 +17,9 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Routes
 import analysisRouter from "./routes/analysis.routes.js";
+import authRouter from "./routes/auth.routes.js";
+
 app.use("/api/v1/analysis", analysisRouter);
+app.use("/api/v1/auth", authRouter);
 
 export { app };
