@@ -4,21 +4,30 @@ import CSVUpload from '../components/HomePageComponent/CSVUpload';
 import analysisService from '../services/analysisServices';
 import AnalysisResults from '../components/AnalysisComponent/AnalysisResults';
 import GraphView from '../components/AnalysisComponent/GraphView';
+import LoadingDialog from '../components/Common/LoadingDialog';
 import Papa from 'papaparse';
 import { AlertCircle, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 const AnalyzePage = () => {
   const [data, setData] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [timedLoading, setTimedLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const resultsRef = useRef(null);
 
   const handleUpload = async (csvData) => {
     setLoading(true);
+    setTimedLoading(true);
     setError(null);
     setAnalysis(null);
+    
+    // Start the 3-second timer
+    const timer = new Promise(resolve => setTimeout(resolve, 3000));
+    
     try {
       const transactions = csvData.filter(row => row.transaction_id || row.TransactionID).map(row => ({
         transaction_id: row.transaction_id || row.TransactionID,
@@ -34,12 +43,23 @@ const AnalyzePage = () => {
 
       setData({ transactions });
       const result = await analysisService.analyzeTransactions(transactions);
+      
+      // Wait for both results and 3-second timer
+      await timer;
+      
       setAnalysis(result.data);
+      
+      // Smooth scroll to results after a small delay to ensure rendering
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+
     } catch (err) {
       setError(err.message || "Failed to analyze data. Please check CSV format bhai.");
       console.error(err);
     } finally {
       setLoading(false);
+      setTimedLoading(false);
     }
   };
 
@@ -100,24 +120,12 @@ const AnalyzePage = () => {
           </div>
         )}
 
-        {loading ? (
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            padding: '60px', 
-            gap: '24px', 
-            background: 'var(--card)',
-            borderRadius: '24px',
-            border: '1px solid var(--border)'
-          }}>
-            <div className="spinner" />
-            <p style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>Analyzing transactions...</p>
+        {analysis && (
+          <div ref={resultsRef}>
+            <AnalysisResults results={analysis} onDownload={downloadJSON} />
           </div>
-        ) : (
-          analysis && <AnalysisResults results={analysis} onDownload={downloadJSON} />
         )}
+        <LoadingDialog isOpen={timedLoading} />
       </div>
     </MainLayout>
   );
